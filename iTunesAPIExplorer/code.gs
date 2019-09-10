@@ -20,20 +20,20 @@ function displayArtistData() {
   // Get search keyword
   var ss = SpreadsheetApp.getActiveSpreadsheet()
   var sheet = ss.getActiveSheet()
-  
+
   var artist = sheet.getRange(4, 2).getValue()
   var tracks = calliTunesAPI(artist)
   var results = tracks["results"]
-  
+
   var output = []
-  
+
   results.forEach(function(elm, i) {
     var image = '=image("' + elm["artworkUrl60"] + '",4,60,60)'
     var hyperlink = '=hyperlink("' + elm["previewUrl"] + '","Listen to preview")'
     output.push([elm["artistName"],elm["collectionName"],elm["trackName"],image,hyperlink])
     sheet.setRowHeight(i+8, 65)
   })
-  
+
   // sort by album
   var sortedOutput = output.sort( function(a,b) {
     
@@ -46,20 +46,20 @@ function displayArtistData() {
     // names are equal
     return 0
   })
-  
+
   // adds an index number to the array
   sortedOutput.forEach(function(elem,i) {
     elem.unshift(i + 1)
   })
-  
+
   var len = sortedOutput.length
-  
+
   // clear any previous content
   sheet.getRange(8,1,500,6).clearContent()
-  
+
   // paste in the values
   sheet.getRange(8,1,len,6).setValues(sortedOutput)
-  
+
   // formatting
   sheet.getRange(8,1,500,6).setVerticalAlignment("middle")
   sheet.getRange(8,5,500,1).setHorizontalAlignment("center")
